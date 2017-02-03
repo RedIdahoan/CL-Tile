@@ -1,0 +1,50 @@
+ ----------------------------------------
+|File|Edit|View|Stuff|Help	         |
+|----------------------------------------|
+|Buttons-Toolbar		         |
+|----------------------------------------|
+|Toolbox|Canvas		  |Preview Widget|
+|       |		  |	  	 |
+|       |		  |--------------|
+|	|		  |Sheetname	 |
+|	|		  |Tiles	 |
+|	|		  |		 |
+|	|		  |		 |
+|	|		  |______________|
+|	|		  |Current Tile  |
+|	|		  |Number	 |
+|	|		  |______________|
+|	|		  |Nodes	 |
+|	|		  |		 |
+|_______|_________________|______________|
+
+PROGRAM STRUCTURE
+
+GUI:
+Main
+   -Window
+        -Menubars
+	-Toolbox
+	-canvas
+	-preview widget
+	-sheet widget
+	-current-tile widget
+	-nodes widget (future)
+DATA TYPES:
+OBJECT  : (name file surface size-x size-y tsx tsy columns rows array cells)
+	  Almost all possible variables will have this structure (Just for Lisp Tile Editor. Other methods in future apps.)
+STRUCTS : LTF (name array tile-size) -> used by Canvas widget
+	: sheet (image surface tsx tsy cells) -> used by Sheet widget
+
+LISP tile file format:
+
+'TYPE'  "NAME"
+	Att1
+	Att2
+	...
+	Attn
+End
+
+OBJS::Work-in-progress
+Layers -> '((layer1) (layer2) (layer3) ... (layern))  
+	layer1 -> "Layer 1" size-x size-y data -> (push layer1 #|never defvaring layer1 though, a 'pseduo-variable'|# (cdr (last layers)))
