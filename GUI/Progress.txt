@@ -1,0 +1,8 @@
+MENUS
+99%
+
+TOOLBAR
+99%
+
+BUTTONS
+70% (99% for prototype)

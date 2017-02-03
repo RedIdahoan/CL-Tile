@@ -1,0 +1,8 @@
+Paint
+90% (testing needed)
+
+Bucket
+(freeze dev)
+
+Erase
+90% (testing needed)

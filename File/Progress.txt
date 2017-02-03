@@ -1,0 +1,14 @@
+Parser for LISP Tile File
+10%
+
+New file
+80% (pending further tests)
+
+Export
+99% (pending changes)
+
+Open-tile-sheet
+95% (pending further tests)
+
+CSV
+5% (not necessary currently - freeze development)

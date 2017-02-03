@@ -1,0 +1,49 @@
+(defvar current-tool nil)
+(defvar icon-sheet nil)
+
+(defmacro defbutton (name)
+  `(progn (defvar ,name (make-instance 'gtk-button))
+  ))
+(defmacro defgadget (name &body body)
+  `(progn ()
+	  ))
+(defmacro deftool (name &body body)
+  `(progn (defun ,name ()
+	    ,@body)
+	  ))
+#|(defmacro draw-tool (name icon x y)
+  `(progn ()
+	  ))|#
+
+(defgadget menu-bar
+	   ()
+	   )
+
+(defgadget tool-box
+	   ()
+	   )
+
+(deftool paint
+    (when (or (and (> (mod mouse-x 32) -1) (> (mod mouse-y 32) -1)) (and (< (mod mouse-x 32) (cadr map-array)) (< (mod mouse-y 32) (car map-array))))
+      (setf (aref map-array gtk-mouse-x gtk-mouse-y) current-cell)
+      )
+  )
+
+(deftool eraser
+    ()
+  )
+
+(deftool bucket
+    ()
+  )
+
+(defbutton Brush)
+
+(defbutton Erase)
+
+(defbutton Fill)
+
+(defvar Tile-Window (make-instance 'gtk-window
+				   :type :top-level
+				   :title "Common Lisp Tiles"
+				   ))
