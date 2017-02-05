@@ -1,7 +1,7 @@
 (in-package :CL-Tile)
 
-(defvar tile-sheets nil)
-(append object-list tile-sheets)
+#|(defvar tile-sheets nil)
+(append object-list tile-sheets)|#
 
 (defun open-sheet (file tile-size-x tile-size-y)
   (let ((t-s-x tile-size-x)
@@ -15,10 +15,16 @@
 			       collect (list x y)
 				 )
 		       )))
-      (defvar tile-sheet (make-obj "Tile-Sheet" file cr size-x size-y t-s-x t-s-y (mod size-x t-s-x) (mod size-y t-s-y) nil cells))
-      (append (make-obj "Tile-Sheet" file cr size-x size-y t-s-x t-s-y (mod size-x t-s-x) (mod size-y t-s-y) nil cells) tile-sheets)
+      (setf (obj-cells Tile-File) cells)
+      (setf (obj-sheet Tile-File) file)
+      (setf (obj-rows Tile-File) (mod size-y t-s-y))
+      (setf (obj-columns Tile-File) (mod size-x t-s-x))
+      #|(defvar tile-sheet (make-obj "Tile-Sheet" file cr size-x size-y t-s-x t-s-y (mod size-x t-s-x) (mod size-y t-s-y) nil cells))
+      (append (make-obj "Tile-Sheet" file cr size-x size-y t-s-x t-s-y (mod size-x t-s-x) (mod size-y t-s-y) nil cells) tile-sheets)|#
       (add-tile-sheet-canvas)
       (make-tile-widget)
+      (make-canvas-widget)
+      (make-preview-widget)
       )
     )
   )

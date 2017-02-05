@@ -1,8 +1,8 @@
 Parser for LISP Tile File
-10%
+80%
 
 New file
-80% (pending further tests)
+90% (pending further tests)
 
 Export
 99% (pending changes)

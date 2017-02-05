@@ -1,9 +1,23 @@
 (in-package #:CL-Tile)
 
+(defstruct obj
+  (name nil)
+  (file nil)
+  (surface nil)
+  (size-x nil)
+  (size-y nil)
+  (tsx nil)
+  (tsy nil)
+  (columns 0)
+  (rows 0)
+  (array nil)
+  (cells nil)
+  (sheet nil))
+  
 (defvar object-list nil)
-
-(defun make-obj (name file surface size-x size-y tsx tsy columns rows array cells)
-  (list name file surface size-x size-y tsx tsy columns rows array cells)
+#|
+(defun make-obj (name file surface size-x size-y tsx tsy columns rows array cells sheet)
+  (list name file surface size-x size-y tsx tsy columns rows array cells sheet)
   )
 
 (defun obj-name (obj)
@@ -39,3 +53,7 @@
 (defun obj-cells (obj)
   (nth 10 obj)
   )
+(defun obj-sheet (obj)
+  (nth 11 obj)
+  )
+|#

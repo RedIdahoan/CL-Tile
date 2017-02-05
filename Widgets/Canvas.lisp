@@ -7,8 +7,8 @@ DRAWING AREA
 (in-package #:CL-Tile)
 
 (defvar map-scroll-window (make-instance 'gtk-scrolled-window
-					 :width-request 1000
-					 :height-requst 600))
+					 :width-request 600
+					 :height-requst 1000))
 (defvar map-viewport (gtk-viewport-new))
 (gtk-container-add map-scroll-window map-viewport)
 
@@ -35,9 +35,9 @@ DRAWING AREA
 				  :pointer-motion-mask))
   (g-signal-connect canvas "button-press-event"
 		    (lambda (widget event)
-		      (declare (ignore widget))
 		      (if (eql 1 (gdk-event-button-button event))
-			  (let ((x (gdk-event-button-x event))
+			  (let ((cr (gdk-pixbuf-get-from-surface tile-sheet-canvas (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) (obj-tsx Tile-File) (obj-tsy Tile-File)))
+				(x (gdk-event-button-x event))
 				(y (gdk-event-button-y event)))
 			    (edit-canvas x y)))
 		      )
@@ -45,14 +45,14 @@ DRAWING AREA
   )
 
 (defun make-canvas-widget ()
-  (let ((size-x (* (obj-tsx Tile-File) (cadr (array-dimensions (obj-array Tile-File)))))
-	(size-y (* (obj-tsy Tile-File) (car (array-dimensions (obj-array Tile-File)))))
+  (let ((size-x (* (obj-tsx Tile-File) (obj-size-x Tile-File)))
+	(size-y (* (obj-tsy Tile-File) (obj-size-y Tile-File)))
 	)
     (defvar map-canvas (make-instance 'tile-canvas
 				      :width-request size-x
 				      :height-request size-y))
     (gtk-container-add map-viewport map-canvas)
-    (gtk-widget-show-all map-viewport)
+    (gtk-widget-show-all map-scroll-window)
     )
   )
 

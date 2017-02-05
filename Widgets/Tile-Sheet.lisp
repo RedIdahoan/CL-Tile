@@ -143,15 +143,16 @@ _________________________
   (gtk-widget-add-events tile-sheet-canvas '(:button-press-mask))
   (gtk-container-add tile-sheet-viewport tile-sheet-canvas)
   (gtk-widget-show-all tile-sheet-viewport)
+  (gtk-widget-show-all tile-sheet-layout)
   )
 
 (defun draw-tile-sheet (cr)
-  (cairo-set-source-surface cr (obj-surface tile-sheet) 0 0)
+ ;;;; (cairo-set-source-surface cr (obj-surface Tile-File) 0 0)
   (cairo-paint cr)
   )
 
 (defun select-tile (x y)
-  (let ((tile (+ (mod x (obj-tsx tile-sheet)) (* (mod y (obj-tsy tile-sheet)) (obj-columns tile-sheet))))
+  (let ((tile (+ (mod x (obj-tsx Tile-File)) (* (mod y (obj-tsy Tile-File)) (obj-columns Tile-File))))
 	)
     (setf current-tile tile)    
     )

@@ -11,10 +11,11 @@
   )
 
 (in-package #:CL-Tile)
-(setf *default-pathname-defaults* (merge-pathnames "LISP/Tile Editor/" *default-pathname-defaults*))
+;;;;(setf *default-pathname-defaults* (merge-pathnames "LISP/CL-Tile/" *default-pathname-defaults*))
     
 (defvar current-tool nil)
 (defvar current-tile 0)
+(defvar Tile-File nil)
 
 (defun Tile-App ()
   (within-main-loop
