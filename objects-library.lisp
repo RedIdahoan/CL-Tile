@@ -12,7 +12,9 @@
   (rows 0)
   (array nil)
   (cells nil)
-  (sheet nil))
+  (sheet nil)
+  (ts-surface nil)
+  (map-surface nil))
   
 (defvar object-list nil)
 #|

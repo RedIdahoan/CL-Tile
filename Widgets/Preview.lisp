@@ -1,11 +1,9 @@
 ;;;;PREVIEW OR MINI-MAP
 (in-package #:CL-Tile)
 
-(defvar preview-scroll (make-instance 'gtk-scrolled-window
+(defvar preview-widget (make-instance 'gtk-scrolled-window
 				      :width-request 120
 				      :height-request 300))
-(defvar preview-viewport (gtk-viewport-new))
-(gtk-container-add preview-scroll preview-viewport)
 
 
 (defclass prev-canvas (gtk-drawing-area)
@@ -30,15 +28,12 @@
 
 (defun make-preview-widget ()
   (defvar preview-canvas (make-instance 'prev-canvas))
-  (defvar preview-canvas-surface (cairo-create (cairo-image-surface-create :argb32
-									   (* 8 (cadr (array-dimensions (obj-array Tile-File))))
-									   (* 8 (car (array-dimensions (obj-array Tile-File))))
-									   )))
-  (gtk-container-add preview-viewport preview-canvas)
+  (gtk-container-add preview-widget preview-canvas)
   )
 
 (defun draw-preview (cr)
-  (cairo-set-source-surface cr preview-canvas-surface 0 0)
+  (cairo-set-source-surface cr (obj-map-surface Tile-File) 0 0)
+  (cairo-fill cr)
   (cairo-scale cr 0.1 0.1)
   (cairo-paint cr)
   )

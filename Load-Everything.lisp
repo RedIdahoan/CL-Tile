@@ -16,7 +16,7 @@
   )
 
 (load "Widgets/Canvas.lisp")
-(load "Widgets/Current-Tile.lisp")
+;;;;(load "Widgets/Current-Tile.lisp")
 (load "Widgets/Preview.lisp")
 (load "Widgets/Tile-Sheet.lisp")
 (load "Widgets/Toolbox.lisp")

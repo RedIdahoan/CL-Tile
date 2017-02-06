@@ -13,24 +13,9 @@ _________________________
 (in-package #:CL-Tile)
 
 (defvar i 0)
-(defvar tile-sheet-layout (make-instance 'gtk-layout
-					 :width-request 120
+(defvar tile-sheet-widget (make-instance 'gtk-scrolled-window
+					 :width-request 300
 					 :height-request 300))
-(defvar tile-sheet-widget (gtk-scrolled-window-new))
-(defvar tile-sheet-viewport (make-instance 'gtk-viewport
-					   :width-request 120
-					   :height-request 280))
-(defvar ts-button (make-instance 'gtk-button
-				 :label "New"
-				 :height-request 20
-				 :width-request 20)) ;new file icon
-(gtk-layout-put tile-sheet-layout tile-sheet-viewport 0 0)
-(gtk-layout-put tile-sheet-layout ts-button 12 280)
-(gtk-container-add tile-sheet-widget tile-sheet-layout)
-(g-signal-connect ts-button "clicked"
-		  (lambda (widget)
-		    (declare (ignore widget))
-		    (sheet-dialog)))
 
 (defun sheet-dialog ()
   (let ((dialog-box (gtk-dialog-new-with-buttons "New Sheet"
@@ -138,21 +123,21 @@ _________________________
   )
 
 
-(defun add-tile-sheet-canvas ()
-  (defvar tile-sheet-canvas (make-instance 't-s-canvas))
-  (gtk-widget-add-events tile-sheet-canvas '(:button-press-mask))
-  (gtk-container-add tile-sheet-viewport tile-sheet-canvas)
-  (gtk-widget-show-all tile-sheet-viewport)
-  (gtk-widget-show-all tile-sheet-layout)
+(defun add-tile-sheet-canvas (sx sy)
+  (defvar tile-sheet-canvas (make-instance 't-s-canvas
+					   :height-request sy
+					   :width-request sx))
+  (gtk-container-add tile-sheet-widget tile-sheet-canvas)
+  (gtk-widget-show-all tile-sheet-widget)
   )
 
 (defun draw-tile-sheet (cr)
- ;;;; (cairo-set-source-surface cr (obj-surface Tile-File) 0 0)
+  (cairo-set-source-surface cr (obj-ts-surface Tile-File) 0 0)
   (cairo-paint cr)
   )
 
 (defun select-tile (x y)
-  (let ((tile (+ (mod x (obj-tsx Tile-File)) (* (mod y (obj-tsy Tile-File)) (obj-columns Tile-File))))
+  (let ((tile (+ (floor (/ x (obj-tsx Tile-File))) (* (floor (/ y (obj-tsy Tile-File))) (obj-columns Tile-File))))
 	)
     (setf current-tile tile)    
     )
