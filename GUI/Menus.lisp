@@ -31,12 +31,16 @@
 
 (def-menu-item new-item "New")
 (def-menu-item open-item "Open")
+(def-menu-item save-item "Save")
 (def-menu-item close-item "Close")
+(def-menu-item export-item "Export")
 (def-menu-item exit-item "Exit")
 (append-item new-item file-menu)
 (append-item open-item file-menu)
+(append-item save-item file-menu)
 (append-item close-item file-menu)
 (append-item (gtk-separator-menu-item-new) file-menu)
+(append-item export-item file-menu)
 (append-item exit-item file-menu)
 
 (g-signal-connect new-item "activate"
@@ -45,15 +49,28 @@
 		    (New-File-Dialog)
 		    ))
 
+(g-signal-connect save-item "activate"
+		  (lambda (widget)
+		    (declare (ignore widget))
+		    (save-to-ltf (obj-file Tile-File))
+		    ))
+
 (g-signal-connect close-item "activate"
 		  (lambda (widget)
 		    (declare (ignore widget))
 		    ))
 
+(g-signal-connect export-item "activate"
+		  (lambda (widget)
+		    (declare (ignore widget))
+		    (export-dialog)
+		    ))
+
 (g-signal-connect exit-item "activate"
 		  (lambda (widget)
 		    (declare (ignore widget))
-		    (gtk-widget-destroy Tile-Window)))
+		    (gtk-widget-destroy Tile-Window)
+		    ))
 
 
 (def-menu-item undo-item "Undo")
@@ -82,15 +99,15 @@
 		  (lambda (widget)
 		    (declare (ignore widget))
 		    (zoom-in-canvas)
-		    )
-		  )
+		    ))
+		  
 
 (g-signal-connect zoom-out-item "activate"
 		  (lambda (widget)
 		    (declare (ignore widget))
 		    (zoom-out-canvas)
-		    )
-		  )
+		    ))
+		  
 |#
 (def-menu-item about-item "About this Program")
 (def-menu-item directions-item "How do I...")

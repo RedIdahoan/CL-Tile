@@ -22,9 +22,3 @@
 		    (declare (ignore widget))
 		    (setf current-tool 'erase)
 		    ))
-
-#|
-(defvar paint-button (make-instance 'gtk-button))
-(defvar erase-button (make-instance 'gtk-button))
-(defvar fill-button (make-instance 'gtk-button))
-|#

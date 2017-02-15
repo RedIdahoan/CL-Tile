@@ -12,12 +12,10 @@
 (tool-from-stock new-button "gtk-new")
 (tool-from-stock open-button "gtk-open")
 (tool-from-stock save-button "gtk-save")
-(tool-from-stock quit-button "gtk-quit")
 
 (append-tool toolbar new-button -1)
 (append-tool toolbar open-button -1)
 (append-tool toolbar save-button -1)
-(append-tool toolbar quit-button -1)
 
 (g-signal-connect new-button "clicked"
 		  (lambda (widget)
@@ -38,11 +36,4 @@
 		  (lambda (widget)
 		    (declare (ignore widget))
 		    (save-to-LTF (obj-file Tile-File))
-		    )
-		  )
-
-(g-signal-connect quit-button "clicked"
-		  (lambda (widget)
-		    (declare (ignore widget))
-		    (gtk-widget-destroy Tile-Window)
 		    ))

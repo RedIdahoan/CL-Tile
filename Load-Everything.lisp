@@ -11,9 +11,9 @@
 (load "Tools/Paint.lisp")
 (load "Tools/Undo-Redo.lisp")
 
-(defmacro render-cell (n)
+#|(defmacro render-cell (n)
   `(cairo-surface-create-for-rectangle (obj-surface tile-sheet) (car (nth ,n (obj-cells tile-sheet))) (cadr (nth ,n (obj-cells tile-sheet))) (obj-tsx tile-sheet) (obj-tsy tile-sheet))
-  )
+  )|#
 
 (load "Widgets/Canvas.lisp")
 ;;;;(load "Widgets/Current-Tile.lisp")
@@ -24,6 +24,7 @@
 
 (pack-widgets)
 
+(load "File/Export.lisp")
 (load "File/New-File.lisp")
 (load "File/Open-Tile-Sheet.lisp")
 (load "File/Lisp-Tile-File-Parse.lisp")

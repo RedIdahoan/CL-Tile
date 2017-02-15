@@ -16,7 +16,7 @@ DRAWING AREA
 
 (defmethod initialize-instance :after
     ((canvas tile-canvas) &key &allow-other-keys)
-  (g-timeout-add 50 (lambda ()
+  (g-timeout-add 25 (lambda ()
 		      (gtk-widget-queue-draw canvas)
 		      +g-source-continue+))
   (g-signal-connect canvas "draw"
@@ -26,8 +26,7 @@ DRAWING AREA
 			(draw-canvas cr)
 			(cairo-destroy cr)
 			)
-		      )
-		    )
+		      ))
   (g-signal-connect canvas "motion-notify-event"
 		    (lambda (widget event)
 		      (format t "MOTION-NOTIFY-EVENT ~A~%" event)
@@ -46,7 +45,9 @@ DRAWING AREA
 			;;;;  (cairo-rectangle cr (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy) tsx tsy)
 			;;;;  (cairo-set-source-surface cr ts (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))))
 			;;;;  (cairo-rectangle cr (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) tsx tsy)
-			  (cairo-set-source-surface cr ts (- (* (floor (/ x tsx)) tsx) (car (nth current-tile (obj-cells Tile-File)))) (- (* (floor (/ y tsy)) tsy) (cadr (nth current-tile (obj-cells Tile-File)))))
+			  (cairo-set-source-surface cr ts
+						    (- (* (floor (/ x tsx)) tsx) (car (nth current-tile (obj-cells Tile-File))))
+						    (- (* (floor (/ y tsy)) tsy) (cadr (nth current-tile (obj-cells Tile-File)))))
 			  (cairo-rectangle tr (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) tsx tsy)
 			  (cairo-clip tr)
 			  (cairo-rectangle cr (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy) tsx tsy)
@@ -65,18 +66,12 @@ DRAWING AREA
 				 (ms (obj-map-surface Tile-File))
 				 (tsx (obj-tsx Tile-File))
 				 (tsy (obj-tsy Tile-File))
-				 (tr (cairo-create ts))
+;				 (tr (cairo-create ts))
 				 (cr (cairo-create ms))
 				 (x (gdk-event-button-x event))
 				 (y (gdk-event-button-y event)))
 			    #|
 			    Jesus fucking christ this was a pain in the ass.
-			    Basically, you have to create a rectangle from the tile-sheet surface at point tile-n-x tile-n-y (will include my tile-sheet as reference, so the grass tile is tile-1, and it's points are (tile-n-x 32) (tile-n-y 0)
-			    Set it as a pattern
-			    Then switch back to the source-surface as the tile-canvas/map whatever you wanna call it.
-			    ^
-			    | Didn't work
-			    Initialize 2 contexts, with the rectangle of of ts being the fill for the rectangle at / x tsx & / y tsy
 			    |#
 			  ;;;;  (cairo-set-source-surface cr ts (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))))
 			  ;;;;  (cairo-rectangle cr (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy) tsx tsy)
@@ -84,22 +79,32 @@ DRAWING AREA
     			  ;;;;  (cairo-rectangle cr 0 0 tsx tsy)
 			  ;;;;  (cairo-set-source-surface cr ts (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy))
 			  ;;;;  (cairo-set-source-surface cr ts 0 0)
-			    (cairo-set-source-surface cr ts (- (* (floor (/ x tsx)) tsx) (car (nth current-tile (obj-cells Tile-File)))) (- (* (floor (/ y tsy)) tsy) (cadr (nth current-tile (obj-cells Tile-File)))))
-			    (cairo-rectangle tr (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) tsx tsy)
-			    (cairo-clip tr)
+			    (cairo-set-source-surface cr ts
+						      (- (* (floor (/ x tsx)) tsx) (car (nth current-tile (obj-cells Tile-File))))
+						      (- (* (floor (/ y tsy)) tsy) (cadr (nth current-tile (obj-cells Tile-File)))))
+;			    (cairo-rectangle tr (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) tsx tsy)
+;			    (cairo-clip tr)
 			    (cairo-rectangle cr (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy) tsx tsy)
 			    (cairo-fill cr)
-			    (cairo-reset-clip tr)
+;			    (cairo-reset-clip tr)
 			    (cairo-destroy cr)
-			    (cairo-destroy tr)
+;			    (cairo-destroy tr)
 			    (gtk-widget-queue-draw widget)
 			    (edit-canvas x y)
 			    )
 			    ;;;Pop-up menu
 			  )
-		      )
-		    )
-  (gtk-widget-add-events canvas '(:button-press-mask :pointer-motion-mask))
+		      ))
+  
+  (g-signal-connect canvas "button-release-event"
+		    (lambda (widget event)
+		      (declare (ignore widget))
+		      (if (eql 1 (gdk-event-button-button event))
+			  (push-to-stack (obj-array Tile-File) undo-stack)
+			  )
+		      ))
+  
+  (gtk-widget-add-events canvas '(:button-press-mask :pointer-motion-mask :button-release-mask))
   )
 
 (defun make-canvas-widget ()

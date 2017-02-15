@@ -10,8 +10,8 @@
     (let* (;;;;(cr surface)
 	   (size-x (cairo-image-surface-get-width surface))
 	   (size-y (cairo-image-surface-get-height surface))
-	   (cells (loop for y from 0 to size-y by t-s-y
-		     append (loop for x from 0 to size-x by t-s-x
+	   (cells (loop for y from 0 to (- size-y t-s-y) by t-s-y
+		     append (loop for x from 0 to (- size-x t-s-x) by t-s-x
 			       collect (list x y)
 				 )
 		       )))
