@@ -1,2 +1,0 @@
-(load "Menus.lisp")
-(load "Toolbar.lisp")

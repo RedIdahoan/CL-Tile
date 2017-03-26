@@ -1,15 +1,20 @@
 (in-package #:CL-Tile)
 
-(defun paint (mx my)
+(defun paint (mx my ts tsx tsy cr)
   (let* ((map (obj-array Tile-File))
 	 (size-x (cadr (array-dimensions map)))
 	 (size-y (car (array-dimensions map)))
-	 (x (round (/ mx (obj-tsx Tile-File))))
-	 (y (round (/ my (obj-tsy Tile-File))))
+	 (x (floor (/ mx (obj-tsx Tile-File))))
+	 (y (floor (/ my (obj-tsy Tile-File))))
 	 )
     (when (and (and (> x -1) (> y -1)) (and (< x size-x) (< y size-y)))
       (setf (aref map y x) current-tile)
       )
     )
+  (cairo-set-source-surface cr ts
+			    (- (* (floor (/ mx tsx)) tsx) (car (nth current-tile (obj-cells Tile-File))))
+			    (- (* (floor (/ my tsy)) tsy) (cadr (nth current-tile (obj-cells Tile-File)))))
+  (cairo-rectangle cr (* (floor (/ mx tsx)) tsx) (* (floor (/ my tsy)) tsy) tsx tsy)
+  (cairo-fill cr)
   )
 

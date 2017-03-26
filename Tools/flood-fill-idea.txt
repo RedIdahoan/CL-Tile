@@ -1,0 +1,12 @@
+attempt at a flood-fill idea 
++---------+
+-100101010-
+-110000001-
+-111011111-
+-000100000-if it starts at 0 to left of the 1, then it goes in a certain direction (finds nearest dir it can take or default, probably default)
+-000011100-Moves in that direction until it hits a barrier, then changes dir (goes left first, then down), until another barrier is hit
+-000000000-then changes dir again (down to right) until barrier, change dir (right to up), barrier, change
+-000000000-
++---------+
+default-dir = up (y - 1), goes up until a barrier, checks left, if it can, change dir to left (- x 1)
+(case dir (up (fill x -1)) (down (fill x +1)) (left fill -1 y) (right fill +1 y))

@@ -4,11 +4,15 @@
 (defvar redo-stack '()) ;;;;On Undo, Push current array onto redo stack, set nth 0 of undo stack to current array
 
 (defun push-to-stack (array stack)
-  (push (loop for y below (car (array-dimensions array))
-	   append (loop for x below (cadr (array-dimensions array))
-		     collect (list (aref array y x))
-		       )) stack)
+  (let ((lst (loop for y below (car (array-dimensions array))
+		append (loop for x below (cadr (array-dimensions array))
+			  collect (list (aref array y x))))))
+    (if (eq stack undo-stack)
+	(setf undo-stack (push lst undo-stack))
+	(setf redo-stack (push lst redo-stack)))
+    )
   )
+	  
 
 (defun Undo (array)
   (push-to-stack array redo-stack)

@@ -1,7 +1,0 @@
-(in-package #:CL-Tile)
-
-(defvar Tile-Window (make-instance 'gtk-window
-				   :default-height 1360
-				   :default-width 720
-				   :title "Common Lisp Tiles"
-				   ))

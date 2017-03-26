@@ -23,14 +23,11 @@
 		    (New-File-Dialog)
 		    ))
 
-#|
 (g-signal-connect open-button "clicked"
 		  (lambda (widget)
 		    (declare (ignore widget))
 		    (open-dialog)
-		    )
-		  )
-|#
+		    ))		  
 
 (g-signal-connect save-button "clicked"
 		  (lambda (widget)

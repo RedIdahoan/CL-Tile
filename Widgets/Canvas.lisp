@@ -9,6 +9,7 @@ DRAWING AREA
 (defvar map-widget (make-instance 'gtk-scrolled-window
 				  :width-request 1000
 				  :height-request 600))
+(defvar filled nil)
 
 (defclass tile-canvas (gtk-drawing-area)
   ()
@@ -23,6 +24,8 @@ DRAWING AREA
 		    (lambda (widget cr)
 		      (declare (ignore widget))
 		      (let ((cr (pointer cr)))
+			(if (eq filled nil)
+			    (initial-fill cr))
 			(draw-canvas cr)
 			(cairo-destroy cr)
 			)
@@ -35,27 +38,12 @@ DRAWING AREA
 			       (ms (obj-map-surface Tile-File))
 			       (tsx (obj-tsx Tile-File))
 			       (tsy (obj-tsy Tile-File))
-			       (tr (cairo-create ts))
 			       (cr (cairo-create ms))
 			       (x (gdk-event-motion-x event))
 			       (y (gdk-event-motion-y event)))	    
-			;;;;  (cairo-set-source-surface cr ts 0 0)
-			;;;;  (cairo-rectangle cr (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) tsx tsy)
-			;;;;  (cairo-set-source-surface cr ts (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy))
-			;;;;  (cairo-rectangle cr (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy) tsx tsy)
-			;;;;  (cairo-set-source-surface cr ts (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))))
-			;;;;  (cairo-rectangle cr (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) tsx tsy)
-			  (cairo-set-source-surface cr ts
-						    (- (* (floor (/ x tsx)) tsx) (car (nth current-tile (obj-cells Tile-File))))
-						    (- (* (floor (/ y tsy)) tsy) (cadr (nth current-tile (obj-cells Tile-File)))))
-			  (cairo-rectangle tr (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) tsx tsy)
-			  (cairo-clip tr)
-			  (cairo-rectangle cr (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy) tsx tsy)
-			  (cairo-fill cr)
+			  (edit-canvas x y ts tsx tsy cr) ;put operations in their respective files.
 			  (cairo-destroy cr)
-			  (cairo-destroy tr)
 			  (gtk-widget-queue-draw widget)
-			  (edit-canvas x y)
 			  )			
 			)
 		      +gdk-event-stop+))
@@ -66,31 +54,12 @@ DRAWING AREA
 				 (ms (obj-map-surface Tile-File))
 				 (tsx (obj-tsx Tile-File))
 				 (tsy (obj-tsy Tile-File))
-;				 (tr (cairo-create ts))
 				 (cr (cairo-create ms))
 				 (x (gdk-event-button-x event))
 				 (y (gdk-event-button-y event)))
-			    #|
-			    Jesus fucking christ this was a pain in the ass.
-			    |#
-			  ;;;;  (cairo-set-source-surface cr ts (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))))
-			  ;;;;  (cairo-rectangle cr (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy) tsx tsy)
-			  ;;;;  (cairo-set-source-surface cr ts (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy))
-    			  ;;;;  (cairo-rectangle cr 0 0 tsx tsy)
-			  ;;;;  (cairo-set-source-surface cr ts (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy))
-			  ;;;;  (cairo-set-source-surface cr ts 0 0)
-			    (cairo-set-source-surface cr ts
-						      (- (* (floor (/ x tsx)) tsx) (car (nth current-tile (obj-cells Tile-File))))
-						      (- (* (floor (/ y tsy)) tsy) (cadr (nth current-tile (obj-cells Tile-File)))))
-;			    (cairo-rectangle tr (car (nth current-tile (obj-cells Tile-File))) (cadr (nth current-tile (obj-cells Tile-File))) tsx tsy)
-;			    (cairo-clip tr)
-			    (cairo-rectangle cr (* (floor (/ x tsx)) tsx) (* (floor (/ y tsy)) tsy) tsx tsy)
-			    (cairo-fill cr)
-;			    (cairo-reset-clip tr)
+			    (edit-canvas x y ts tsx tsy cr) ;put operations in their respective files.
 			    (cairo-destroy cr)
-;			    (cairo-destroy tr)
 			    (gtk-widget-queue-draw widget)
-			    (edit-canvas x y)
 			    )
 			    ;;;Pop-up menu
 			  )
@@ -107,6 +76,26 @@ DRAWING AREA
   (gtk-widget-add-events canvas '(:button-press-mask :pointer-motion-mask :button-release-mask))
   )
 
+(defun initial-fill (cr)
+  (let ((tsx (obj-tsx Tile-File))
+	(tsy (obj-tsy Tile-File))
+	(size-x (cadr (array-dimensions (obj-array Tile-File))))
+	(size-y (car (array-dimensions (obj-array Tile-File))))
+	(ts (obj-ts-surface Tile-File))
+	(array (obj-array Tile-File))
+	)
+    (loop for x below size-x
+       do (loop for y below size-y
+	     do (progn (cairo-set-source-surface cr ts
+						 (- (* x tsx) (car (nth (aref array y x) (obj-cells Tile-File))))
+						 (- (* y tsy) (cadr (nth (aref array y x) (obj-cells Tile-File)))))
+		       (cairo-rectangle cr (* x tsx) (* y tsy) tsx tsy)
+		       (cairo-fill cr)
+		       )
+	       )
+	 ))
+  )
+
 (defun make-canvas-widget ()
   (let* ((size-x (* (obj-tsx Tile-File) (obj-size-x Tile-File)))
 	 (size-y (* (obj-tsy Tile-File) (obj-size-y Tile-File)))
@@ -119,10 +108,11 @@ DRAWING AREA
     )
   )
 
-(defun edit-canvas (x y)
+(defun edit-canvas (x y ts tsx tsy cr)
   (case current-tool
-    (paint (paint x y))
-    (erase (erase x y))
+    (paint (paint x y ts tsx tsy cr))
+    (erase (erase x y tsx tsy cr))
+    (bucket (bucket x y ts cr nil))
     )
   )
 

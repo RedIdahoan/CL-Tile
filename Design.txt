@@ -1,22 +1,22 @@
- ----------------------------------------
-|File|Edit|View|Stuff|Help	         |
-|----------------------------------------|
-|Buttons-Toolbar		         |
-|----------------------------------------|
-|Toolbox|Canvas		  |Preview Widget|
-|       |		  |	  	 |
-|       |		  |--------------|
-|	|		  |Sheetname	 |
-|	|		  |Tiles	 |
-|	|		  |		 |
-|	|		  |		 |
-|	|		  |______________|
-|	|		  |Current Tile  |
-|	|		  |Number	 |
-|	|		  |______________|
-|	|		  |Nodes	 |
-|	|		  |		 |
-|_______|_________________|______________|
+ ------------------------------------------------
+|File|Edit|View|Stuff|Help			 |
+|------------------------------------------------|
+|Buttons-Toolbar				 |
+|------------------------------------------------|
+|Toolbox|Canvas			  |Preview Widget|
+|       |		  	  |	  	 |
+|       |		  	  |--------------|
+|	|			  |Sheetname	 |
+|	|		  	  |Tiles	 |
+|	|		  	  |		 |
+|	|		  	  |		 |
+|	|		  	  |______________|
+|	|		  	  |Current Tile  |
+|	|		  	  |Number	 |
+|	|		  	  |______________|
+|	|		  	  |Nodes/Layers	 |
+|	|		  	  |		 |
+|_______|_________________________|______________|
 
 PROGRAM STRUCTURE
 
@@ -29,12 +29,12 @@ Main
 	-preview widget
 	-sheet widget
 	-current-tile widget
+	-Layers widget
 	-nodes widget (future)
+	-Layer/nodes widget will be tabbed
 DATA TYPES:
-OBJECT  : (name file surface size-x size-y tsx tsy columns rows array cells)
-	  Almost all possible variables will have this structure (Just for Lisp Tile Editor. Other methods in future apps.)
-STRUCTS : LTF (name array tile-size) -> used by Canvas widget
-	: sheet (image surface tsx tsy cells) -> used by Sheet widget
+OBJECT (obj-data var): (name file surface size-x size-y tsx tsy columns rows layers cells ts-surface map-surface) ;;size-x size-y is used to determine the canvas's size;;
+	  	       Almost all possible variables will have this structure (Just for Lisp Tile Editor. Other methods in future apps.)
 
 LISP tile file format:
 
@@ -48,3 +48,26 @@ End
 OBJS::Work-in-progress
 Layers -> '((layer1) (layer2) (layer3) ... (layern))  
 	layer1 -> "Layer 1" size-x size-y data -> (push layer1 #|never defvaring layer1 though, a 'pseduo-variable'|# (cdr (last layers)))
+Layer creation
+      Add layer button
+      Dialog box for name, size-x, size-y (tiles)
+      pushes/appends the data for the Layer struct to (obj-layers var)
+      every layer creation gets rid of nil in the layers "slot"
+      Layers/nodes Widget determines which layer is selected and keeps it highlighted
+      On canvas click, it checks for the current layer determined by some method
+
+(defstruct obj
+  (name nil)
+  (file nil)
+  (surface nil)
+  (size-x nil)
+  (size-y nil)
+  (tsx nil)
+  (tsy nil)
+  (columns 0)
+  (rows 0)
+  (array nil)
+  (cells nil)
+  (sheet nil)
+  (ts-surface nil)
+  (map-surface nil))

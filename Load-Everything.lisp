@@ -7,13 +7,10 @@
 (load "GUI/Toolbar.lisp")
 (load "GUI/Buttons.lisp")
 
+(load "Tools/Bucket.lisp")
 (load "Tools/Erase.lisp")
 (load "Tools/Paint.lisp")
 (load "Tools/Undo-Redo.lisp")
-
-#|(defmacro render-cell (n)
-  `(cairo-surface-create-for-rectangle (obj-surface tile-sheet) (car (nth ,n (obj-cells tile-sheet))) (cadr (nth ,n (obj-cells tile-sheet))) (obj-tsx tile-sheet) (obj-tsy tile-sheet))
-  )|#
 
 (load "Widgets/Canvas.lisp")
 ;;;;(load "Widgets/Current-Tile.lisp")

@@ -1,6 +1,14 @@
 MAIN
 75% done
 	-GUI
+		-Effectively done 99%
 	-TOOLS
+		-90%
+		-Change paint icon to a stamp
 	-FILE-OPS
+		-Unsure, mostly done I believe
 	-WIDGETS
+		-Preview needs to be worked on
+		-Current tile needs to be worked on
+		-Need to have them resize when user resizes window
+		-Other than that, 100%

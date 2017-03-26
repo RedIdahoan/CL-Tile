@@ -1,8 +1,8 @@
 Paint
-90% (testing needed)
+100% (further improvements can be done, but the current scope is done.)
 
 Bucket
-(freeze dev)
+75% (Needs improvement on the algorithm and general bugfix)
 
 Erase
-90% (testing needed)
+100% (same as Paint)

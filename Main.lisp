@@ -3,6 +3,29 @@
 (load "Main.lisp")
 (in-package #:CL-Tile)
 (tile-app)
+
+
+;;;;Function for cairo-image-surface-get-height
+
+(defcfun ("cairo_image_surface_get_height" cairo-image-surface-get-height) :int
+ #+cl-cffi-gtk-documentation
+ "@version{2014-2-7}
+  @argument[surface]{a @symbol{cairo-surface-t}}
+  @return{The height of the surface in pixels.}
+  @begin{short}
+    Get the height of the image surface in pixels.
+  @end{short}
+
+  Since 1.0
+  @see-symbol{cairo-surface-t}
+  @see-function{cairo-image-surface-get-width}"
+  (surface (:pointer (:struct cairo-surface-t))))
+
+(export 'cairo-image-surface-get-height)
+
+;;;;In "/path/to/quicklisp-installation/dists/quicklisp/software/cl-cffi-gtk-date-git/cairo/cairo.image-surface.lisp
+;;;;Put the (defcfun ...) (export ...) into that file
+;;;;It should be near the bottom, the file will be fairly self-explanatory of what to do
 |#
 
 (defpackage #:CL-Tile
@@ -11,7 +34,6 @@
   )
 
 (in-package #:CL-Tile)
-;;;;(setf *default-pathname-defaults* (merge-pathnames "LISP/CL-Tile/" *default-pathname-defaults*))
     
 (defvar current-tool 'paint)
 (defvar current-tile 0)
