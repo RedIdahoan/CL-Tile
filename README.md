@@ -16,7 +16,7 @@ There is also a small issue in regard to the function "Cairo-image-surface-get-h
 How To Run this Program:
 
 I'll eventually compile and make an executable of this program when it's "finished", that is, when it can run without an error springing up.
-I will not be providing support on a windows setup (unless I get a patreon setup or something to that effect).
+I will not be providing support on a windows setup for the time being.
 
 1. Install a LISP Implementation - I use sbcl (sbcl should be available through your package manager)
 2. Install quicklisp
